@@ -1,0 +1,6 @@
+@decorator_redis_demo_HostAddress = http://localhost:5023
+
+GET {{decorator_redis_demo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

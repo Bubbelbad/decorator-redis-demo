@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    hostname: postgres
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: /run/secrets/postgres-pwd
+      POSTGRES_DB: ${POSTGRES_DB:-bikes}
+    secrets:
+      - postgres-pwd
+    volumes:
+      - pgdata:/var/lib/postgresql/18/docker
+
+volumes:
+  pgdata:
