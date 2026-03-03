@@ -1,3 +1,4 @@
+using decorator_redis_demo.Customers;
 using DecoratorRedisDemo.Database;
 
 namespace DecoratorRedisDemo
@@ -16,6 +17,7 @@ namespace DecoratorRedisDemo
 
 			// Add services
 			builder.Services.AddDatabase(builder.Configuration);
+			builder.Services.AddCustomer();
 
             var app = builder.Build();
 
