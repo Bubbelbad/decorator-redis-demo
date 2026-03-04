@@ -1,8 +1,8 @@
 namespace DecoratorRedisDemo.Database;
 
-internal record class BikeEntity
+public record class BikeEntity
 {
-    public required string Id { get; set; }
-    public required string Size { get; set; }
-    public required string Brand { get; set; }
+	public string Id { get; set; } = Guid.NewGuid().ToString();
+    public required string Size { get; init; }
+    public required string Brand { get; init; }
 }

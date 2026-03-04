@@ -6,7 +6,6 @@ public static class CustomerExtensionMethods
 {
 	public static IServiceCollection AddCustomer(this IServiceCollection services)
 	{
-		services.AddMemoryCache();
 		services.AddScoped<CustomerRepository>();
 		services.AddScoped<ICustomerRepository, CachedCustomerRepository>(); 
 
