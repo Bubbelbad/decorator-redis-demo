@@ -1,7 +1,7 @@
 namespace DecoratorRedisDemo.Database;
 
-internal record class CustomerEntity
+public record class CustomerEntity
 {
-    public required string Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public required string Name { get; set; }
 }

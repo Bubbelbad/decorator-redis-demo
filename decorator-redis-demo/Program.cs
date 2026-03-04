@@ -1,39 +1,52 @@
 using decorator_redis_demo.Customers;
 using DecoratorRedisDemo.Database;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
+using Scalar.AspNetCore;
 
 namespace DecoratorRedisDemo
 {
     internal static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
 			// Add services
 			builder.Services.AddDatabase(builder.Configuration);
 			builder.Services.AddCustomer();
 
+			builder.Services.AddHybridCache(o =>
+			{
+				o.DefaultEntryOptions = new HybridCacheEntryOptions
+				{
+					LocalCacheExpiration = TimeSpan.FromMinutes(5), // Local IMemoryCache
+					Expiration = TimeSpan.FromMinutes(5) // Distributed Cache
+				};
+			});
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            using (var scope = app.Services.CreateScope())
+                await scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.MigrateAsync();
+
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
+
+				app.MapGet("/", () => Results.Redirect("/scalar"))
+					.ExcludeFromDescription(); 
             }
 
+            // Configure the HTTP request pipeline.
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

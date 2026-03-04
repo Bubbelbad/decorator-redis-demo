@@ -1,37 +1,34 @@
 using DecoratorRedisDemo.Database;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace decorator_redis_demo.Customers;
 
 internal class CachedCustomerRepository : ICustomerRepository
 {
 	private readonly CustomerRepository _decorated;
-	private readonly IMemoryCache _memoryCache;
+	private readonly HybridCache _hybridCache;
 
-	public CachedCustomerRepository(CustomerRepository decorated, IMemoryCache memoryCache)
+	public CachedCustomerRepository(CustomerRepository decorated, HybridCache hybridCache)
 	{
 		_decorated = decorated;
-		_memoryCache = memoryCache; 
+		_hybridCache = hybridCache;
 	}
 
-	public Task<CustomerEntity> Add(CustomerEntity customer)
+	public async Task<CustomerEntity> Add(string name, CancellationToken token) =>
+		await _decorated.Add(name, token);
+	
+
+	public async Task<CustomerEntity?> GetById(string id, CancellationToken token)
 	{
-		throw new NotImplementedException();
-	}
+		var cachedCustomer = await _hybridCache.GetOrCreateAsync($"customer-{id}", async entry =>
+		{
+			var customer = await _decorated.GetById(id, token); 
 
-	public Task<CustomerEntity?> GetById(string id)
-	{
-		string key = $"customer-{id}";
+			return customer;
+		}, cancellationToken: token).ConfigureAwait(true);
 
-		return _memoryCache.GetOrCreate(
-			key,
-			entry =>
-			{
-				entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-
-				return _decorated.GetById(id);
-			});
-
+		return cachedCustomer;
 	}
 
 	public string Update(CustomerEntity customer)

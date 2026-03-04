@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace decorator_redis_demo.Customers;
 
+public record CreateCustomerRequest(string Name);
+
 [ApiController]
-[Route("[controller]")]
-internal class CustomersController : ControllerBase
+[Route("api/[controller]")]
+public class CustomersController : ControllerBase
 {
 	private readonly ICustomerRepository _repository;
 
@@ -13,12 +15,12 @@ internal class CustomersController : ControllerBase
 		_repository = repository;
 
 
-	[HttpGet("{id}", Name = "GetCustomer")]
-	public async Task<ActionResult<CustomerEntity>> Get(string id)
+	[HttpGet("{id}")]
+	public async Task<ActionResult<CustomerEntity>> Get(string id, CancellationToken token)
 	{
 		try
 		{
-			var customer = await _repository.GetById(id).ConfigureAwait(false);
+			var customer = await _repository.GetById(id, token).ConfigureAwait(false);
 			return Ok(customer);
 		}
 		catch (InvalidOperationException)
@@ -28,10 +30,10 @@ internal class CustomersController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<ActionResult<CustomerEntity>> Post([FromBody] CustomerEntity customer)
+	public async Task<ActionResult<CustomerEntity>> Post([FromBody] CreateCustomerRequest request, CancellationToken token)
 	{
-		var created = await _repository.Add(customer).ConfigureAwait(false);
-		return CreatedAtRoute("GetCustomer", new { id = created.Id }, created);
+		var created = await _repository.Add(request.Name, token).ConfigureAwait(false);
+		return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
 	}
 
 	[HttpPut("{id}")]

@@ -415,6 +415,10 @@ $RECYCLE.BIN/
 ### VisualStudio ###
 .env
 
+# Docker secrets (contains passwords)
+**/secrets/
+
 # User-specific files
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,windows,visualstudio
+/decorator-redis-demo/appsettings.Development.json

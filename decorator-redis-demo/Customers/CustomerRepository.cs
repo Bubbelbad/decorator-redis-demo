@@ -10,16 +10,20 @@ internal class CustomerRepository : ICustomerRepository
 	public CustomerRepository(DatabaseContext context) =>
 		_context = context;
 
-	public async Task<CustomerEntity?> GetById(string id) =>
+	public async Task<CustomerEntity?> GetById(string id, CancellationToken token) =>
 		await _context
 			.Set<CustomerEntity>()
 			.FirstOrDefaultAsync(customer => customer.Id == id).ConfigureAwait(false); 
 		//await _context.Customers.FirstAsync(x => x.Id == id).ConfigureAwait(false);
 
-	public async Task<CustomerEntity> Add(CustomerEntity customer)
+	public async Task<CustomerEntity> Add(string name, CancellationToken token)
 	{
-		var entry = _context.Customers.Add(customer);
-		await _context.SaveChangesAsync().ConfigureAwait(false);
+		var entry = _context.Customers.Add(new CustomerEntity { Name = name });
+
+		await _context
+			.SaveChangesAsync(token)
+			.ConfigureAwait(false);
+
 		return entry.Entity;
 	}
 
