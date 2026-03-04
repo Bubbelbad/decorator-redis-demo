@@ -1,5 +1,4 @@
 using DecoratorRedisDemo.Database;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Hybrid;
 
 namespace decorator_redis_demo.Customers;
@@ -21,6 +20,7 @@ internal class CachedCustomerRepository : ICustomerRepository
 
 	public async Task<CustomerEntity?> GetById(string id, CancellationToken token)
 	{
+
 		var cachedCustomer = await _hybridCache.GetOrCreateAsync($"customer-{id}", async entry =>
 		{
 			var customer = await _decorated.GetById(id, token); 

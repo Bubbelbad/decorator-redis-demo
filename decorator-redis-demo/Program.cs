@@ -26,9 +26,14 @@ namespace DecoratorRedisDemo
 			{
 				o.DefaultEntryOptions = new HybridCacheEntryOptions
 				{
-					LocalCacheExpiration = TimeSpan.FromMinutes(5), // Local IMemoryCache
-					Expiration = TimeSpan.FromMinutes(5) // Distributed Cache
+					Expiration = TimeSpan.FromMinutes(5), // Distributed Cache
+					LocalCacheExpiration = TimeSpan.FromSeconds(5), // Local IMemoryCache
 				};
+			});
+
+			builder.Services.AddStackExchangeRedisCache(redisOptions =>
+			{
+				redisOptions.Configuration = builder.Configuration.GetConnectionString("Redis");
 			});
 
             var app = builder.Build();
