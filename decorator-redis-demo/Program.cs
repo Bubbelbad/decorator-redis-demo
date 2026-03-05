@@ -1,4 +1,5 @@
 using decorator_redis_demo.Bikes;
+using decorator_redis_demo.Companies;
 using decorator_redis_demo.Customers;
 using DecoratorRedisDemo.Database;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace DecoratorRedisDemo
 			builder.Services.AddDatabase(builder.Configuration);
 			builder.Services.AddCustomer();
 			builder.Services.AddBikes();
+			builder.Services.AddCompanies();
 
 			builder.Services.AddHybridCache(o =>
 			{
@@ -36,7 +38,7 @@ namespace DecoratorRedisDemo
 				redisOptions.Configuration = builder.Configuration.GetConnectionString("Redis");
 			});
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             //using (var scope = app.Services.CreateScope())
             //    await scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.MigrateAsync();
