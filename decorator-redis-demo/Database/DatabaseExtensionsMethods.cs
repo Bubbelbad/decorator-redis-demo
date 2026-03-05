@@ -9,8 +9,8 @@ namespace DecoratorRedisDemo.Database
 			services.AddDbContext<DatabaseContext>(opt =>
 			{
 				var connectionString =
-					configuration.GetConnectionString("db") ??
-					throw new InvalidOperationException("Connection string 'db' not found");
+					configuration.GetConnectionString("Db") ??
+					throw new InvalidOperationException("Connection string 'Db' not found");
 
 				opt.UseNpgsql(
 					connectionString,

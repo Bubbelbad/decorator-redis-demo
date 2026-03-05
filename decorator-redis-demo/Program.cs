@@ -38,8 +38,8 @@ namespace DecoratorRedisDemo
 
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
-                await scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.MigrateAsync();
+            //using (var scope = app.Services.CreateScope())
+            //    await scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.MigrateAsync();
 
             if (app.Environment.IsDevelopment())
             {
