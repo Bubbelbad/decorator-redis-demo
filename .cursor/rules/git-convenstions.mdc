@@ -1,0 +1,60 @@
+---
+description: Git branch naming conventions
+alwaysApply: true
+---
+
+# Branch Naming Conventions
+
+## Format
+
+```
+<type>/<short-description>
+```
+
+Include a ticket ID when available: `<type>/<TICKET-ID>-<short-description>`
+
+## Allowed Prefixes
+
+| Prefix | Purpose |
+|---|---|
+| `feature/` | New features, enhancements |
+| `fix/` | Bug fixes |
+| `hotfix/` | Urgent production fixes |
+| `refactor/` | Refactoring without behavior change |
+| `chore/` | Build, tooling, dependencies, config |
+| `docs/` | Documentation only |
+| `test/` | Adding or updating tests |
+| `release/` | Release preparation |
+
+## Rules
+
+1. Lowercase only
+2. Use hyphens (`-`) between words (kebab-case)
+3. Keep under ~50 characters total
+4. Use present tense (`add-login`, not `added-login`)
+5. Letters, numbers, and hyphens only in the description part
+6. Include ticket ID when applicable (e.g. `feature/EDIEL-42-add-jwt-auth`)
+
+## Examples
+
+```
+feature/add-user-dashboard
+feature/jwt-auth
+fix/login-redirect-loop
+hotfix/payment-validation-crash
+refactor/extract-auth-service
+chore/update-dependencies
+docs/api-endpoints
+feature/EDIEL-42-add-jwt-auth
+```
+
+## Anti-patterns
+
+- `my-branch`, `test`, `fix` -- too vague, always describe the change
+- `Feature_Add_Login` -- use lowercase kebab-case, not PascalCase or underscores
+- `fix/bug` -- describe what the fix addresses
+- `feature/add-login-and-registration-and-password-reset` -- too long; split into separate branches
+
+## Validation Regex
+
+Branch names must match: `^(feature|fix|hotfix|refactor|chore|docs|test|release)/[a-z0-9-]+$`
