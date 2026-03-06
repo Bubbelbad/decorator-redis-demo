@@ -1,6 +1,7 @@
 using decorator_redis_demo.Bikes;
 using decorator_redis_demo.Companies;
 using decorator_redis_demo.Customers;
+using decorator_redis_demo.Rentals;
 using DecoratorRedisDemo.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
@@ -23,6 +24,7 @@ namespace DecoratorRedisDemo
 			builder.Services.AddCustomer();
 			builder.Services.AddBikes();
 			builder.Services.AddCompanies();
+			builder.Services.AddRentals();
 
 			builder.Services.AddHybridCache(o =>
 			{
