@@ -20,7 +20,8 @@ The project exposes a REST API for managing customers, bikes, companies, and ren
 | **ORM** | Entity Framework Core + Npgsql (PostgreSQL) |
 | **Caching** | `Microsoft.Extensions.Caching.Hybrid` + Redis (distributed L2) |
 | **API docs** | Scalar (OpenAPI) |
-| **Containerization** | Docker Compose (Postgres + app) |
+| **Containerization** | Docker Compose (Postgres + Redis + app) |
+| **CI/CD** | GitHub Actions (build, test, push to GHCR) |
 
 ## Running locally
 
@@ -37,6 +38,10 @@ The API will be available at `http://localhost:8080`. API documentation is serve
 ## Project structure
 
 ```
+.github/
+  workflows/
+    ci-cd.yml                     # CI (build + test) and CD (push Docker image to GHCR)
+
 Database/
   DatabaseContext.cs            # EF Core DbContext
   BikeEntity.cs

@@ -49,7 +49,7 @@ public class RentalRepository : IRentalRepository
 		rental.EndDate = DateTime.UtcNow;
 		rental.Status = "Returned";
 
-		await _context.SaveChangesAsync(token).ConfigureAwait(true);
+		await _context.SaveChangesAsync(token).ConfigureAwait(false);
 
 		return rental;
 	}
